@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 
@@ -24,13 +25,14 @@ class Items{
 
     public void displayDetails(){
         System.out.println("Details: " + "Product: "+ productname + " , prize: "+prize + " , quantity: "+ quantitiy + " , manufacture date: "+ manufacturedate + " , expiary date: "+ expiarydate );
+        System.out.println();
     }
 
     public double getprize(){
         return this.prize;
     }
 
-    public String getdetailstopdf(){
+    public String getdetailstotextfile(){
         return "product: " + productname + "| prize: "+prize; 
     }
 
@@ -44,6 +46,8 @@ public class ioserial{
     private static final String filename = "itms.csv";
     private static Map<String, Items> itemsmap = new HashMap<>();
     private static List<String> pursheditems = new ArrayList<>();
+    private static List<String> allcodes = new ArrayList<>();
+    private static final String customerfile = "customer.csv";
     
     public static void main(String args[]){
         loadthedetails();
@@ -52,16 +56,19 @@ public class ioserial{
 
         System.out.print("Enter the cashier name: ");
         String cashiername = scan.nextLine();
+        System.out.println();
 
         System.out.print("Enter the customer name: ");
         String customername = scan.nextLine();
+        System.out.println();
 
         System.out.print("Enter the branch: ");
         String branchname = scan.nextLine();
-
+        System.out.println();
 
 
         System.out.println("Is there no items type 0!!");
+        System.out.println();
 
         double grandtotal = 0;
 
@@ -73,8 +80,10 @@ public class ioserial{
                 Items item = itemsmap.get(inputcode);
                 if(item!=null){
                     item.displayDetails();
-                    pursheditems.add(item.getdetailstopdf());
+                    pursheditems.add(item.getdetailstotextfile());
+                    allcodes.add(inputcode);
                     grandtotal = grandtotal + item.getprize();
+                    
                 }
                 else{
                     System.out.println("The code is wrong!!");
@@ -84,6 +93,7 @@ public class ioserial{
                 break;
             }
         }
+        savecustomerdetails(cashiername,customername,branchname,allcodes,grandtotal);
         pdfgenerate(cashiername,customername,branchname,pursheditems,grandtotal);
         
         
@@ -115,10 +125,10 @@ public class ioserial{
     public static void pdfgenerate(String cashiername, String customername, String branchname, List<String> pursheditems, double grandtotal){
         String filepath = "bill.txt";
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(filepath))){
-            writer.write("======Supermarket Bill====\n");
+            writer.write("======Supermarket Bill====\n\n");
             writer.write("Cashier Name: "+cashiername+ "\n");
             writer.write("Customer Name: "+customername+ "\n");
-            writer.write("Branch Name: "+branchname + "\n");
+            writer.write("Branch Name: "+branchname + "\n\n");
             writer.write("---------------------------------\n");
 
             
@@ -138,6 +148,21 @@ public class ioserial{
         }
         catch(IOException e){
             System.out.println("Error while generating text file: "+e);
+        }
+    }
+
+    public static void savecustomerdetails(String cashiername, String customername, String branchname, List<String> allcodes, double grandtotal){
+        boolean fileexist = new File(customerfile).exists();
+        try(BufferedWriter writers = new BufferedWriter(new FileWriter(customerfile,true))){
+            if(!fileexist){
+                writers.write("cashier,customer,branch,purchased items, total price, timestamp\n");
+            }
+            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            writers.write(cashiername+","+customername+","+branchname+","+String.join("|",allcodes)+","+grandtotal+","+timestamp+"\n");
+
+        }
+        catch(IOException e){
+            System.out.println("Error while saving the customer details!!!");
         }
     }
 }
