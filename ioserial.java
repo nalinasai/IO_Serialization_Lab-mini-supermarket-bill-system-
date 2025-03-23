@@ -1,9 +1,6 @@
 import java.io.*;
 import java.util.*;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
+
 
 
 
@@ -116,31 +113,31 @@ public class ioserial{
     }
 
     public static void pdfgenerate(String cashiername, String customername, String branchname, List<String> pursheditems, double grandtotal){
-        String filepath = "bill.pdf";
-        try{
-            PdfWriter writer = new PdfWriter(filepath);
-            PdfDocument pdf = new PdfDocument(writer);
-            Document document = new Document(pdf);
+        String filepath = "bill.txt";
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(filepath))){
+            writer.write("======Supermarket Bill====\n");
+            writer.write("Cashier Name: "+cashiername+ "\n");
+            writer.write("Customer Name: "+customername+ "\n");
+            writer.write("Branch Name: "+branchname + "\n");
+            writer.write("---------------------------------\n");
 
-            document.add(new Paragraph("Supermarket Bill").setBold().setSize(14));
-            document.add(new Paragraph("Cashier: "+cashiername));
-            document.add(new Paragraph("Customer: "+customername));
-            document.add(new Paragraph("Branch: "+branchname));
-            document.add(new Paragraph("--------------------------------------"));
+            
 
             for(String itemdetail: pursheditems){
-                document.add(new Paragraph(itemdetail));
+                writer.write(itemdetail+"\n");
             }
 
-            document.add(new Paragraph("-----------------------------------"));
-            document.add(new Paragraph("Total price: $"+grandtotal));
 
-            document.close();
-            System.out.print("PDF Bill saved as "+filepath);
+            writer.write("---------------------------------\n");
+            writer.write("Total prize: $ "+grandtotal+"\n");
+            writer.write("==============================\n");
+
+           
+            System.out.print("Bill saved as "+filepath);
 
         }
         catch(IOException e){
-            System.out.println("Error while generating PDF: ");
+            System.out.println("Error while generating text file: "+e);
         }
     }
 }

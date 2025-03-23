@@ -1,0 +1,10 @@
+======Supermarket Bill====
+Cashier Name: Nalina
+Customer Name: mathushalini
+Branch Name: kaddubeddha
+---------------------------------
+product: maliban| prize: 210.5
+product: choco| prize: 100.0
+---------------------------------
+Total prize: $ 310.5
+==============================
