@@ -36,8 +36,6 @@ class Items{
         return "product: " + productname + "| prize: "+prize; 
     }
 
-    
-    
 }
 
 
@@ -155,6 +153,7 @@ public class ioserial{
         boolean fileexist = new File(customerfile).exists();
         try(BufferedWriter writers = new BufferedWriter(new FileWriter(customerfile,true))){
             if(!fileexist){
+                
                 writers.write("cashier,customer,branch,purchased items, total price, timestamp\n");
             }
             String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
