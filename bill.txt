@@ -1,14 +1,12 @@
 ======Supermarket Bill====
 
-Cashier Name: mathu
-Customer Name: joi
-Branch Name: manipay
+Cashier Name: Nalinna
+Customer Name: tisa
+Branch Name: jaffna
 
 ---------------------------------
 product: choco| prize: 100.0
-product: bar| prize: 120.75
-product: choco| prize: 100.0
-product: juic| prize: 50.0
+product: maliban| prize: 210.5
 ---------------------------------
-Total prize: $ 370.75
+Total prize: $ 310.5
 ==============================
